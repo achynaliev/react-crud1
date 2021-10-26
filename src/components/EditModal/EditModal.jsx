@@ -1,13 +1,12 @@
-import React, { createContext, useState } from "react";
-import "./contactAdd.css";
-// const Context = createContext([],
-//    addContact: (contact) => );
+import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
+import "./editmodal.css";
 
-const ContactAdd = (props) => {
-  const [firstname, setFname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+const EditModal = (props) => {
+  const [firstname, setFname] = useState(props.contact.firstname);
+  const [lastname, setLastname] = useState(props.contact.lastname);
+  const [phone, setPhone] = useState(props.contact.phone);
+  const [email, setEmail] = useState(props.contact.email);
 
   function saveContact() {
     let cont = {
@@ -17,17 +16,18 @@ const ContactAdd = (props) => {
       email,
     };
 
-    props.addContact(cont);
-    setFname("");
-    setLastname("");
-    setPhone("");
-    setEmail("");
+    props.handleClose();
+    props.updateContact(cont, props.index);
   }
 
   return (
-    <div className="addCardSpace">
-      <div className="addCard">
+    <Modal show={props.show} onHide={props.handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit contact</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="Modalbody">
         <label>Firstname</label>
+        <br />
         <input
           className="addFirstname"
           type="text"
@@ -35,7 +35,9 @@ const ContactAdd = (props) => {
           value={firstname}
           onChange={(e) => setFname(e.target.value)}
         ></input>
+        <br />
         <label>Lastname</label>
+        <br />
         <input
           className="addLastname"
           type="text"
@@ -43,7 +45,9 @@ const ContactAdd = (props) => {
           value={lastname}
           onChange={(e) => setLastname(e.target.value)}
         ></input>
+        <br />
         <label>Phone number</label>
+        <br />
         <input
           className="addPhoneNumber"
           type="number"
@@ -51,7 +55,9 @@ const ContactAdd = (props) => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         ></input>
+        <br />
         <label>Email address</label>
+        <br />
         <input
           className="addEmail"
           type="email"
@@ -59,16 +65,17 @@ const ContactAdd = (props) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         ></input>
-        <br />
-        <button
-          className="btn btn-success addBtn"
-          onClick={() => saveContact()}
-        >
-          Add Contact
-        </button>
-      </div>
-    </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={props.handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={() => saveContact()}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-export default ContactAdd;
+export default EditModal;
